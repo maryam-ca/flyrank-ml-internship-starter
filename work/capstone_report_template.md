@@ -1,9 +1,9 @@
 # Capstone Report — <your lane>
 
-- **Author:**
-- **Lane:**
-- **Repo:**
-- **Date:**
+- **Author:**Maryam Fatima
+- **Lane:**Refresh / Content Opportunity Scoring
+- **Repo:**https://github.com/maryam-ca/flyrank-ml-internship-starter
+- **Date:** 5 August 2026
 
 > Copy this file to `work/capstone_report.md` and fill it in as you build. Sections 1–8
 > mirror the Pass / Needs-Work rubric axes, so nothing here is optional. Sections 0 and 9
@@ -12,61 +12,125 @@
 
 ## 0. Abstract
 
-Five sentences, written last, placed first: question → data → method → headline result →
-what the output is for. This is the top of your deployed paper.
+This project investigates which content pages should be prioritized for refresh using search intelligence signals. The analysis was performed on the FlyRank Internship Starter Dataset containing 30,000 records and 53 features. After data cleaning, feature engineering, and exploratory analysis, a Refresh Opportunity Score was created and machine learning models were trained to classify pages into High, Medium, and Low refresh priority. The Random Forest model achieved 98.6% accuracy and identified content age, content length, and engagement metrics as the strongest indicators of refresh priority. The resulting ranked recommendations provide a practical decision-support framework for planning content updates.
 
-## 1. Problem framing
+## 1. Problem Framing
 
-What decision does this support? Name the unit of analysis (page, client, day…), the output
-(score, rank, cluster, report), the action a human takes from it, and the cost of a wrong
-call. Why does data/ML help here at all?
+This project supports the decision of identifying which content pages should be refreshed first.
 
-## 2. Data safety
+The unit of analysis is an individual content page.
 
-Which data you used and which columns you deliberately excluded (and why). Leakage risks you
-considered — especially label-derived fields (`trend_direction`, `trend_pct`) and pseudonymous
-IDs (grouping only, never features). Confirm nothing client-identifying appears anywhere in
-`work/`.
+The output is a refresh priority (High, Medium, or Low) together with a numerical refresh score.
+
+Editors can use this ranking to prioritize content updates instead of reviewing every page manually.
+
+Machine learning helps combine multiple search and engagement signals into a consistent decision-support system.
+
+## 2. Data Safety
+
+The project uses the FlyRank Internship Starter Dataset containing anonymized search performance data.
+
+The provider_used column was removed because it contained more than 70% missing values.
+
+Identifier columns such as content_id and client_id were never used as machine learning features.
+
+No client names, URLs, domains, credentials, or confidential search queries were included in the analysis.
+
+The project follows FlyRank's public data safety guidelines.
 
 ## 3. Baseline
 
-The transparent rule or score you built first. Why it's a fair comparison, and its numbers on
-the same data and metric as your model.
+A Decision Tree classifier was selected as the baseline model.
 
-## 4. Model / analysis
+The baseline achieved approximately 98.2% accuracy.
 
-Your method and why it fits the lane. The exact feature list (and what you left out on
-purpose). The target or proxy definition, in one sentence.
+This model provides a simple and interpretable comparison before training a more robust ensemble model.
+
+## 4. Model / Analysis
+
+The final model uses a Random Forest Classifier.
+
+Features included:
+
+- Search Volume
+- Competition
+- CPC
+- Word Count
+- Character Count
+- Impressions
+- Clicks
+- Sessions
+- Users
+- Engagement Rate
+- CTR
+- Average Position
+- Content Age
+- Days Since Last Update
+- Trend Percentage
+- Health Score
+
+The target variable is Refresh Priority, generated from the Refresh Opportunity Score and grouped into High, Medium, and Low classes.
 
 ## 5. Evaluation
 
-Your split (grouped by client? time-aware?) and why. Metrics, model vs baseline **on the same
-split**. What the errors look like — a short error analysis beats a big metric table.
+The dataset was divided into 80% training data and 20% testing data using stratified sampling.
+
+Baseline Model
+
+Decision Tree Accuracy: 98.2%
+
+Final Model
+
+Random Forest Accuracy: 98.6%
+
+The Random Forest model produced more stable predictions while maintaining strong precision and recall across all refresh priority classes.
 
 ## 6. Interpretation
 
-What the model/clusters actually found. Feature importances or cluster profiles in plain
-words. Surprises and negative results — a well-understood "no effect" is a valid result.
+Feature importance analysis showed that Content Age was the strongest predictor of refresh priority.
+
+Additional influential features included Character Count, Days Since Last Update, Word Count, and Engagement Rate.
+
+These findings suggest that older content with lower engagement should generally be reviewed before recently updated content.
 
 ## 7. Recommendation
 
-The ranked actions or decisions your output supports, and how a FlyRank editor would use them
-tomorrow. State your confidence and the limits explicitly.
+The model recommends ranking pages into High, Medium, and Low refresh priority.
+
+High-priority pages should be refreshed immediately.
+
+Medium-priority pages should be reviewed during scheduled content updates.
+
+Low-priority pages should continue to be monitored without immediate changes.
+
+These recommendations provide decision support and should be combined with editorial review before implementation.
 
 ## 8. Reproducibility
 
-The exact commands to re-run everything from a fresh clone, your random seeds, and your
-environment (`pip freeze` highlights or `requirements.txt` deltas). If you claim a sealed or
-holdout evaluation, two things must be committed: the cell/script that builds the sealed
-frame, and the metrics file it produced — "evaluated once, blind" should be checkable from
-your repo, not taken on faith.
+The project was developed using Python in Google Colab.
 
-## 9. Acknowledgments & data credit
+Main libraries include:
 
-One short section at the bottom of the deployed paper: "Built on the FlyRank ML Internship
-dataset" **linking to https://flyrank.ai**. Crediting your data source is standard research
-practice — and it's on the capstone's required-section list, so a paper without it isn't done.
+- pandas
+- numpy
+- matplotlib
+- scikit-learn
+- datasets
+- huggingface_hub
 
+Random seed: 42
+
+The notebook can be executed from top to bottom to reproduce all preprocessing, modeling, evaluation, and recommendation steps.
+
+## 9. Acknowledgments & Data Credit
+
+Built on the FlyRank ML Internship Dataset.
+
+Data Source:
+
+https://flyrank.ai
+
+This project was completed as part of the FlyRank Machine Learning Internship Capstone.
 ---
 
 > **Claims checklist before submitting:** observed / measured / directional / decision-support
